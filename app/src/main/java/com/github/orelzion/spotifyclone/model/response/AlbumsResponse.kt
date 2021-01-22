@@ -4,10 +4,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AlbumsResponse(val total: Int, val items: List<Album>)
+data class AlbumsResponseWrapper(val albums: AlbumsResponse)
+
+@Serializable
+data class AlbumsResponse(val total: Int, val offset: Int, val items: List<Album>)
 
 @Serializable
 data class Album(
+    val id: String,
     val artists: List<Artist>,
     val images: List<Image>,
     val name: String,
