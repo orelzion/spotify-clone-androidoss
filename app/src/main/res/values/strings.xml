@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SpotifyClone</string>
+    <string name="total_tracks">%1$d tracks</string>
+    <string name="loading_error">Fail to load data, please try again later</string>
 </resources>

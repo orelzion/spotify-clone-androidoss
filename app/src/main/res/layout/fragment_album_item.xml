@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/albumArtView"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/albumTitleView"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/artistNameView"
+        app:layout_constraintStart_toEndOf="@+id/albumArtView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="15dp"
+        tools:text="Chazak" />
+
+    <TextView
+        android:id="@+id/artistNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/albumArtView"
+        app:layout_constraintStart_toStartOf="@id/albumTitleView"
+        app:layout_constraintTop_toBottomOf="@+id/albumTitleView"
+        tools:text="Avraham Frid" />
+
+    <TextView
+        android:id="@+id/totalTracksView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="12 Tracks"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@id/artistNameView"
+        app:layout_constraintTop_toTopOf="@id/artistNameView"
+        app:layout_constraintBottom_toBottomOf="@id/artistNameView"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
