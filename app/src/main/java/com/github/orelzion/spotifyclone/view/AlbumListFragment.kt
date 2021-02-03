@@ -7,11 +7,13 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.github.orelzion.spotifyclone.R
 import com.github.orelzion.spotifyclone.model.AlbumsResponse
 import com.github.orelzion.spotifyclone.model.repository.BrowseRepository
 import com.github.orelzion.spotifyclone.viewmodel.AlbumViewData
+
 
 /**
  * A fragment representing a list of Items.
@@ -39,10 +41,17 @@ class AlbumListFragment : Fragment(R.layout.fragment_items_list) {
     }
 
     private fun onItemClicked(albumId: String) {
-        // TODO: Understand how to call loadTracks
-//        loadTracks(albumId)
+        showFragment(R.id.mainFragmentContainer, TracksListFragment.newInstance(albumId), true)
     }
 
+    private fun showFragment(containerViewId: Int, fragment: Fragment, addToBackStack: Boolean = true) {
+        fragmentManager?.commit {
+            replace(containerViewId, fragment)
+            if(addToBackStack) {
+                addToBackStack(null)
+            }
+        }
+    }
 
     private fun loadAlbums() {
         BrowseRepository.fetchNewReleases { response, t ->

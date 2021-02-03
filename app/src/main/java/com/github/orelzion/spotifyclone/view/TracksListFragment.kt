@@ -3,7 +3,9 @@ package com.github.orelzion.spotifyclone.view
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.github.orelzion.spotifyclone.R
@@ -42,6 +44,8 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
                 loadTracks(it)
             }
         }
+
+        requireView().findViewById<ProgressBar>(R.id.progressBar).isVisible = false
     }
 
     private fun loadTracks(albumId: String) {
