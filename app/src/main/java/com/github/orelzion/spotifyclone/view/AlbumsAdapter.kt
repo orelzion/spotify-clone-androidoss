@@ -13,6 +13,8 @@ import com.github.orelzion.spotifyclone.viewmodel.AlbumViewData
 
 class AlbumsAdapter : ListAdapter<AlbumViewData, AlbumsAdapter.ViewHolder>(AlbumsDiffUtil()) {
 
+    var clickListener: ((String) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_album_item, parent, false)
@@ -21,10 +23,15 @@ class AlbumsAdapter : ListAdapter<AlbumViewData, AlbumsAdapter.ViewHolder>(Album
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
+
+        holder.itemView.setOnClickListener {
+            clickListener?.invoke(getItem(position).id)
+        }
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val albumsArtView: ImageView = view.findViewById(R.id.albumArtView)
+        // TODO: Is albumsArtView redundant?
+        // private val albumsArtView: ImageView = view.findViewById(R.id.albumArtView)
         private val albumTitleView: TextView = view.findViewById(R.id.albumTitleView)
         private val artistNameView: TextView = view.findViewById(R.id.artistNameView)
         private val totalTracksView: TextView = view.findViewById(R.id.totalTracksView)
