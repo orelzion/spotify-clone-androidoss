@@ -22,11 +22,19 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
     private val tracksListView: RecyclerView by lazy { requireView().findViewById(R.id.itemsList) }
     private val tracksAdapter: TracksAdapter by lazy { TracksAdapter() }
 
+    /**
+     *
+     */
     companion object {
+        /**
+         * factory method
+         * accessed via TracksListFragment, as it is being declared in companion object
+         */
         fun newInstance(albumId: String): TracksListFragment {
             return TracksListFragment().apply {
                 arguments = Bundle().apply {
                     putString("albumId", albumId)
+                    // TODO: Ask Orel - Shall I declare albumId as a Pair? in/outside companion object?
                 }
             }
         }
@@ -44,6 +52,7 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
                 loadTracks(it)
             }
         }
+        // TODO: add else - restore savedInstanceState rather than (re-)loadSongs
 
         requireView().findViewById<ProgressBar>(R.id.progressBar).isVisible = false
     }

@@ -23,27 +23,36 @@ class AlbumListFragment : Fragment(R.layout.fragment_items_list) {
     private val albumsListView: RecyclerView by lazy { requireView().findViewById(R.id.itemsList) }
     private val albumsAdapter: AlbumsAdapter by lazy { AlbumsAdapter() }
 
-    private val progressBar: ProgressBar by lazy { requireView().findViewById(R.id.progressBar) }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /**
+         * Set albumAdapter's clickListener to AlbumListFragment's onItemClicked method
+         */
         albumsListView.adapter = albumsAdapter.apply {
             clickListener = this@AlbumListFragment::onItemClicked
         }
-//        albumsListView.layoutManager = LinearLayoutManager(requireContext())
 
+        /**
+         * (re-)load Albums - depends on it's availability
+         */
         if (savedInstanceState == null) {
             loadAlbums()
         }
+        // TODO: add else - restore savedInstanceState rather than (re-)loadAlbums
 
-        progressBar.isVisible = false
+        requireView().findViewById<ProgressBar>(R.id.progressBar).isVisible = false
     }
 
+    /**
+     * onItemClicked - show corresponding tracks' list in main fragment
+     */
     private fun onItemClicked(albumId: String) {
         showFragment(R.id.mainFragmentContainer, TracksListFragment.newInstance(albumId), true)
     }
 
+    // TODO: Ask Orel - is this method should be declared independently,
+    //  so it stays available for both AlbumListFragment and TracksListFragment?
     private fun showFragment(containerViewId: Int, fragment: Fragment, addToBackStack: Boolean = true) {
         fragmentManager?.commit {
             replace(containerViewId, fragment)
