@@ -35,7 +35,7 @@ class TracksAdapter : ListAdapter<TrackViewData, TracksAdapter.ViewHolder>(Track
         }
     }
 
-    // TODO: Ask Orel - it looks like duplicated code - the same as in AlbumsAdapter.kt
+    // It looks like duplicated code - the same as in AlbumsAdapter.kt
     class TracksDiffUtil : DiffUtil.ItemCallback<TrackViewData>(){
         override fun areItemsTheSame(oldItem: TrackViewData, newItem: TrackViewData): Boolean {
             return oldItem === newItem

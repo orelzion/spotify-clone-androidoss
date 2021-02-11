@@ -30,8 +30,6 @@ class AlbumsAdapter : ListAdapter<AlbumViewData, AlbumsAdapter.ViewHolder>(Album
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        // TODO: Is albumsArtView redundant?
-        // private val albumsArtView: ImageView = view.findViewById(R.id.albumArtView)
         private val albumTitleView: TextView = view.findViewById(R.id.albumTitleView)
         private val artistNameView: TextView = view.findViewById(R.id.artistNameView)
         private val totalTracksView: TextView = view.findViewById(R.id.totalTracksView)

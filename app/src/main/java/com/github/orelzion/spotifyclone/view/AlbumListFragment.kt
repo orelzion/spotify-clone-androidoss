@@ -51,8 +51,6 @@ class AlbumListFragment : Fragment(R.layout.fragment_items_list) {
         showFragment(R.id.mainFragmentContainer, TracksListFragment.newInstance(albumId), true)
     }
 
-    // TODO: Ask Orel - is this method should be declared independently,
-    //  so it stays available for both AlbumListFragment and TracksListFragment?
     private fun showFragment(containerViewId: Int, fragment: Fragment, addToBackStack: Boolean = true) {
         fragmentManager?.commit {
             replace(containerViewId, fragment)

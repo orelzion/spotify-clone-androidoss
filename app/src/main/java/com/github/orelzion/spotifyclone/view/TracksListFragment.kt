@@ -7,12 +7,15 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.github.orelzion.spotifyclone.R
 import com.github.orelzion.spotifyclone.model.Tracks
 import com.github.orelzion.spotifyclone.model.TracksResponse
 import com.github.orelzion.spotifyclone.model.repository.BrowseRepository
 import com.github.orelzion.spotifyclone.viewmodel.TrackViewData
+import com.github.orelzion.spotifyclone.viewmodel.TracksViewModel
 
 
 /**
@@ -21,6 +24,8 @@ import com.github.orelzion.spotifyclone.viewmodel.TrackViewData
 class TracksListFragment : Fragment(R.layout.fragment_items_list) {
     private val tracksListView: RecyclerView by lazy { requireView().findViewById(R.id.itemsList) }
     private val tracksAdapter: TracksAdapter by lazy { TracksAdapter() }
+
+    private val tracksViewModel by activityViewModels<TracksViewModel>()
 
     /**
      *
@@ -34,7 +39,6 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
             return TracksListFragment().apply {
                 arguments = Bundle().apply {
                     putString("albumId", albumId)
-                    // TODO: Ask Orel - Shall I declare albumId as a Pair? in/outside companion object?
                 }
             }
         }
@@ -54,29 +58,20 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
         }
         // TODO: add else - restore savedInstanceState rather than (re-)loadSongs
 
+        // hide progressbar
         requireView().findViewById<ProgressBar>(R.id.progressBar).isVisible = false
     }
 
-    private fun loadTracks(albumId: String) {
-        BrowseRepository.fetchAlbumDetails(albumId) { response: TracksResponse?, t: Throwable? ->
-            if (response != null) {
-                tracksAdapter.submitList(responseToTracksData(response))
-            } else {
-                Toast.makeText(requireContext(), R.string.loading_error, Toast.LENGTH_LONG).show()
-                Log.e(AlbumListFragment::javaClass.name, "Failed to load tracks data", t)
-            }
-        }
+    // TODO: Ask Orel - where in the recordings we referred to whether or not we need to deal with onSaveInstanceState, and how to do it.
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
     }
 
-    private fun responseToTracksData(response: TracksResponse): List<TrackViewData> {
-        return response.tracks.items.map {
-            TrackViewData(
-                id = it.id,
-                name = it.name,
-                duration = it.duration,
-                trackNumber = it.trackNumber,
-                externalUrl = it.externalUrl
-            )
-        }
+    private fun loadTracks(albumId: String) {
+        requireArguments().getString("albumId")?.let { tracksViewModel.loadTracks(it) }
+
+        tracksViewModel.bindViewData().observe(viewLifecycleOwner, {
+            tracksAdapter.submitList(it)
+        })
     }
 }
