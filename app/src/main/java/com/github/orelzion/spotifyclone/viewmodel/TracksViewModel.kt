@@ -14,8 +14,10 @@ class TracksViewModel : ViewModel() {
 
     private var tracksListViewData = emptyList<TrackViewData>()
 
+    // ViewModel's Observer
     private val tracksListLiveData = MutableLiveData<List<TrackViewData>>()
 
+    // sort of getter to tracksListLiveData
     fun bindViewData(): LiveData<List<TrackViewData>> = tracksListLiveData
 
     fun loadTracks(albumId : String) {
@@ -31,10 +33,11 @@ class TracksViewModel : ViewModel() {
                 // For no response, a proper message is broadcast to Observer
                     // TODO: Find out what is the right data to send back.
                     tracksListLiveData.postValue(null)
+
+                // TODO: Ask Orel if AlbumListFragment shouldn't be replaced with TracksListFragment
                 Log.e(AlbumListFragment::javaClass.name, "Failed to load tracks data", t)
             }
         }
-
     }
 
     private fun responseToTracksData(response: TracksResponse): List<TrackViewData> {
