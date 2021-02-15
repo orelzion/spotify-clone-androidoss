@@ -12,6 +12,10 @@ import com.github.orelzion.spotifyclone.view.AlbumListFragment
 
 class TracksViewModel : ViewModel() {
 
+    /**
+     * Data
+     */
+
     private var tracksListViewData = emptyList<TrackViewData>()
 
     // Tracks list ViewModel's Observer
@@ -24,6 +28,17 @@ class TracksViewModel : ViewModel() {
     private val selectedTrackLiveData = MutableLiveData<TrackViewData>()
 
     fun selectedTrackBindViewData(): LiveData<TrackViewData> = selectedTrackLiveData
+
+
+    /**
+     * Error
+     */
+
+    private val responseError = MutableLiveData<Error>()
+
+    fun bindErrorData() : LiveData<Error> = responseError
+
+
 
     fun onSelectedTrack(trackData: TrackViewData) {
         selectedTrackLiveData.postValue(trackData)
@@ -40,8 +55,9 @@ class TracksViewModel : ViewModel() {
                 tracksListLiveData.postValue(tracksListViewData)
             } else {
                 // For no response, a proper message is broadcast to Observer
-                    // TODO: Find out what is the right data to send back.
-                    tracksListLiveData.postValue(null)
+                    // I'm pretty sure I get it wrong
+                    // TODO: I still have to find out what is the right data to send back.
+                responseError.postValue(responseError.value)
 
                 Log.e(AlbumListFragment::javaClass.name, "Failed to load tracks data", t)
             }

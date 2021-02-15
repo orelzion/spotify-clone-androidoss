@@ -10,16 +10,33 @@ import com.github.orelzion.spotifyclone.view.AlbumListFragment
 
 class AlbumsViewModel : ViewModel() {
 
+    /**
+     * Data
+     */
+
     // holds the data in ViewModel
     private var albumsListViewData = emptyList<AlbumViewData>()
 
-    // Observer
+    // albums list Live Data Observer
     private val albumsListLiveData = MutableLiveData<List<AlbumViewData>>()
 
     // sort of getter to albumsListLiveDAta
     fun bindViewData() : LiveData<List<AlbumViewData>> = albumsListLiveData
 
 
+    /**
+     * Error
+     */
+
+    // Error Live Data Observer
+    private val responseError = MutableLiveData<Error>()
+
+    fun bindErrorData() : LiveData<Error> = responseError
+
+
+    /**
+     * from ViewModel level call Model level (Repository)
+     */
     fun loadAlbums() {
         BrowseRepository.fetchNewReleases { response, t ->
             if (response != null) {
@@ -27,8 +44,9 @@ class AlbumsViewModel : ViewModel() {
                 albumsListLiveData.postValue(albumsListViewData)
             }
             else {
-                // TODO: figure out what is the right data to broadcast
-                albumsListLiveData.postValue(null)
+                // TODO: I'm pretty sure it's not the right way to pass an error;
+                    //  I still have figure out what is the right data to broadcast
+                responseError.postValue(responseError.value)
 
                 Log.e(AlbumListFragment::javaClass.name, "Failed to load albums data", t)
             }

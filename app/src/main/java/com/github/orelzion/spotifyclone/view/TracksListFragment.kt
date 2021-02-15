@@ -116,5 +116,11 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
         tracksViewModel.tracksListBindViewData().observe(viewLifecycleOwner, {
             tracksAdapter.submitList(it)
         })
+
+        // TODO: Error handling.
+        // we may call
+//        tracksViewModel.bindErrorData().observe(viewLifecycleOwner) {
+//
+//        }
     }
 }
