@@ -2,4 +2,5 @@
     <string name="app_name">SpotifyClone</string>
     <string name="total_tracks">%1$d tracks</string>
     <string name="loading_error">Fail to load data, please try again later</string>
+    <string name="no_tracks_selected_yet">-- No tracks selected yet --</string>
 </resources>
