@@ -22,15 +22,37 @@ import com.github.orelzion.spotifyclone.viewmodel.TracksViewModel
 
 /**
  * A fragment representing a list of Tracks.
+ * Fragment is at the View level
  */
 class TracksListFragment : Fragment(R.layout.fragment_items_list) {
+    /**
+     * View level
+     */
+
+    /**
+     * Reference to RecyclerView that holds tracks' list
+     */
     private val tracksListView: RecyclerView by lazy { requireView().findViewById(R.id.itemsList) }
+
+    /**
+     * Reference to an adapter for the RecyclerView
+     */
     private val tracksAdapter: TracksAdapter by lazy { TracksAdapter() }
 
+
+    /**
+     * ViewModel level
+     */
+
+    /**
+     * Reference to corresponding ViewModel
+     * We use activityViewModels rather than viewModels because we don't want attach that ViewModel
+     * to the current Fragment.
+     */
     private val tracksViewModel by activityViewModels<TracksViewModel>()
 
     /**
-     *
+     * companion object is an object created once for a class; it is not being duplicated for each instance
      */
     companion object {
         /**
@@ -53,8 +75,14 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
             clickListener = this@TracksListFragment::onItemClicked
         }
 
+        /**
+         * From Bundle (created in AlbumsListFragment, when an album was clicked),
+         * get album's id ->
+         */
         val albumId = requireArguments().getString("albumId")
-
+        /**
+         * -> and load it's tracks (loadTracks() would call ViewModel's loadTracks())
+         */
         if (savedInstanceState == null) {
             albumId?.let {
                 loadTracks(it)
@@ -69,27 +97,22 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
     /**
      * onItemClicked - show corresponding tracks' list in main fragment
      */
-    // TODO: replace TracksListFragment.newInstance(albumId)
-    //  with TrackFragment.newInstance(trackId (?) )
     private fun onItemClicked(trackData: TrackViewData) {
-        Log.d(AlbumListFragment::javaClass.name, "Track clicked")
-
         tracksViewModel.onSelectedTrack(trackData)
     }
 
-    // this fun appears at AlbumListFragment as well
-    // - consider "adding" it to Fragment; as far as I remember, it is possible in Kotlin.
-    private fun showFragment(containerViewId: Int, fragment: Fragment, addToBackStack: Boolean = true) {
-        fragmentManager?.commit {
-            replace(containerViewId, fragment)
-            if(addToBackStack) {
-                addToBackStack(null)
-            }
-        }
-    }
+    /**
+     * loadTracks is being called in onViewCreated - meaning, when an album is clicked;
+     * (in albumsListFragment) showFragment is called with TracksListFragment.newInstance(albumId)
+     */
     private fun loadTracks(albumId: String) {
+        /**
+         * call ViewModel's loadTracks() - let it know that an album was clicked and pass albumId ->
+         */
         requireArguments().getString("albumId")?.let { tracksViewModel.loadTracks(it) }
-
+        /**
+         * -> and observe it's reply -
+         */
         tracksViewModel.tracksListBindViewData().observe(viewLifecycleOwner, {
             tracksAdapter.submitList(it)
         })

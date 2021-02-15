@@ -10,7 +10,7 @@ import com.github.orelzion.spotifyclone.view.AlbumListFragment
 
 class AlbumsViewModel : ViewModel() {
 
-    // holds tha data in th ViewModel
+    // holds the data in ViewModel
     private var albumsListViewData = emptyList<AlbumViewData>()
 
     // Observer

@@ -15,6 +15,8 @@ import com.github.orelzion.spotifyclone.R
 //import com.github.orelzion.spotifyclone.viewmodel.AlbumViewData
 import com.github.orelzion.spotifyclone.viewmodel.AlbumsViewModel
 
+import com.github.orelzion.spotifyclone.ClassesExtentions
+import com.github.orelzion.spotifyclone.ClassesExtentions.Companion.showFragment
 
 /**
  * A fragment representing a list of Items.
@@ -54,15 +56,11 @@ class AlbumListFragment : Fragment(R.layout.fragment_items_list) {
         showFragment(R.id.mainFragmentContainer, TracksListFragment.newInstance(albumId), true)
     }
 
-    private fun showFragment(containerViewId: Int, fragment: Fragment, addToBackStack: Boolean = true) {
-        fragmentManager?.commit {
-            replace(containerViewId, fragment)
-            if(addToBackStack) {
-                addToBackStack(null)
-            }
-        }
-    }
-
+    /**
+     * calls ViewModel's loadAlbums
+     * and "listens" to it's corresponding Observer; when a list of albums received,
+     * it is submitted to albumsAdapter to to be displayed (?)
+     */
     private fun loadAlbums() {
         albumsViewModel.loadAlbums()
 

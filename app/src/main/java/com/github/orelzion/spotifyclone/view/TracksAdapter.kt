@@ -23,6 +23,9 @@ class TracksAdapter : ListAdapter<TrackViewData, TracksAdapter.ViewHolder>(Track
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
 
+        /**
+         * on click, get the whole data of track clicked (TrackViewData)
+         */
         holder.itemView.setOnClickListener {
             clickListener?.invoke(getItem(position))
         }

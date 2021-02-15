@@ -10,10 +10,15 @@ import com.github.orelzion.spotifyclone.viewmodel.TracksViewModel
 
 class TrackFragment : Fragment(R.layout.fragment_track_item) {
 
-//    private val selectedTrackView: TextView by lazy { requireView().findViewById(R.id.selectedTrackContainer) }
 
-    private val selectedFragmentName: TextView by lazy { requireView().findViewById(R.id.trackName) }
+    /**
+     * Reference to the TextView that display track's details
+     */
+    private val selectedTrackFragment: TextView by lazy { requireView().findViewById(R.id.trackName) }
 
+    /**
+     * Reference to the corresponding ViewModel
+     */
     private val selectedTrackViewModel by activityViewModels<TracksViewModel>()
 
     companion object {
@@ -25,8 +30,11 @@ class TrackFragment : Fragment(R.layout.fragment_track_item) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /**
+         * "observe" the ViewModel, and update TextView by it.
+         */
         selectedTrackViewModel.selectedTrackBindViewData().observe(viewLifecycleOwner) {
-            selectedFragmentName.text = it.name
+            selectedTrackFragment.text = "${it.trackNumber}\t\t\t${it.name}\t\t\t${it.duration}"
         }
     }
 }
