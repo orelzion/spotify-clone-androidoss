@@ -14,11 +14,20 @@ class TracksViewModel : ViewModel() {
 
     private var tracksListViewData = emptyList<TrackViewData>()
 
-    // ViewModel's Observer
+    // Tracks list ViewModel's Observer
     private val tracksListLiveData = MutableLiveData<List<TrackViewData>>()
 
-    // sort of getter to tracksListLiveData
-    fun bindViewData(): LiveData<List<TrackViewData>> = tracksListLiveData
+    // sort of a getter to tracksListLiveData
+    fun tracksListBindViewData(): LiveData<List<TrackViewData>> = tracksListLiveData
+
+    // Selected Track ViewModel's Observer
+    private val selectedTrackLiveData = MutableLiveData<TrackViewData>()
+
+    fun selectedTrackBindViewData(): LiveData<TrackViewData> = selectedTrackLiveData
+
+    fun onSelectedTrack(trackData: TrackViewData) {
+        selectedTrackLiveData.postValue(trackData)
+    }
 
     fun loadTracks(albumId : String) {
         // As a request for loading tracks is received from View layer, a compatible request is
@@ -34,7 +43,6 @@ class TracksViewModel : ViewModel() {
                     // TODO: Find out what is the right data to send back.
                     tracksListLiveData.postValue(null)
 
-                // TODO: Ask Orel if AlbumListFragment shouldn't be replaced with TracksListFragment
                 Log.e(AlbumListFragment::javaClass.name, "Failed to load tracks data", t)
             }
         }

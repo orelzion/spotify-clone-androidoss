@@ -17,7 +17,7 @@ class AlbumsViewModel : ViewModel() {
     private val albumsListLiveData = MutableLiveData<List<AlbumViewData>>()
 
     // sort of getter to albumsListLiveDAta
-    fun bindViewDAta() : LiveData<List<AlbumViewData>> = albumsListLiveData
+    fun bindViewData() : LiveData<List<AlbumViewData>> = albumsListLiveData
 
 
     fun loadAlbums() {
