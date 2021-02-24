@@ -14,7 +14,7 @@ class TrackFragment : Fragment(R.layout.fragment_track_item) {
     /**
      * Reference to the TextView that display track's details
      */
-    private val selectedTrackFragment: TextView by lazy { requireView().findViewById(R.id.trackName) }
+    private val trackNameView: TextView by lazy { requireView().findViewById(R.id.trackName) }
 
     /**
      * Reference to the corresponding ViewModel
@@ -33,8 +33,8 @@ class TrackFragment : Fragment(R.layout.fragment_track_item) {
         /**
          * "observe" the ViewModel, and update TextView by it.
          */
-        selectedTrackViewModel.selectedTrackBindViewData().observe(viewLifecycleOwner) {
-            selectedTrackFragment.text = "${it.trackNumber}\t\t\t${it.name}\t\t\t${it.duration}"
+        selectedTrackViewModel.selectedTrackLiveData.observe(viewLifecycleOwner) {
+            trackNameView.text = "${it.trackNumber}\t\t\t${it.name}\t\t\t${it.duration}"
         }
     }
 }

@@ -3,20 +3,16 @@ package com.github.orelzion.spotifyclone.view
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-//import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.github.orelzion.spotifyclone.R
-//import com.github.orelzion.spotifyclone.model.AlbumsResponse
-//import com.github.orelzion.spotifyclone.model.repository.BrowseRepository
-//import com.github.orelzion.spotifyclone.viewmodel.AlbumViewData
 import com.github.orelzion.spotifyclone.viewmodel.AlbumsViewModel
 
-import com.github.orelzion.spotifyclone.ClassesExtentions
-import com.github.orelzion.spotifyclone.ClassesExtentions.Companion.showFragment
+import com.github.orelzion.spotifyclone.ClassesExtentions.showFragment
+
+
 
 /**
  * A fragment representing a list of Items.
@@ -64,7 +60,7 @@ class AlbumListFragment : Fragment(R.layout.fragment_items_list) {
     private fun loadAlbums() {
         albumsViewModel.loadAlbums()
 
-        albumsViewModel.bindViewData().observe(viewLifecycleOwner, {
+        albumsViewModel.albumsListLiveData.observe(viewLifecycleOwner, {
             albumsAdapter.submitList(it)
         })
     }

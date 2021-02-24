@@ -1,22 +1,14 @@
 package com.github.orelzion.spotifyclone.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-//import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
-//import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.github.orelzion.spotifyclone.R
 import com.github.orelzion.spotifyclone.viewmodel.TrackViewData
-//import com.github.orelzion.spotifyclone.model.Tracks
-//import com.github.orelzion.spotifyclone.model.TracksResponse
-//import com.github.orelzion.spotifyclone.model.repository.BrowseRepository
-//import com.github.orelzion.spotifyclone.viewmodel.TrackViewData
 import com.github.orelzion.spotifyclone.viewmodel.TracksViewModel
 
 
@@ -72,7 +64,7 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
         super.onViewCreated(view, savedInstanceState)
 
         tracksListView.adapter = tracksAdapter.apply {
-            clickListener = this@TracksListFragment::onItemClicked
+            clickListener = this@TracksListFragment::onTrackSelected
         }
 
         /**
@@ -97,7 +89,7 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
     /**
      * onItemClicked - show corresponding tracks' list in main fragment
      */
-    private fun onItemClicked(trackData: TrackViewData) {
+    private fun onTrackSelected(trackData: TrackViewData) {
         tracksViewModel.onSelectedTrack(trackData)
     }
 
@@ -109,11 +101,13 @@ class TracksListFragment : Fragment(R.layout.fragment_items_list) {
         /**
          * call ViewModel's loadTracks() - let it know that an album was clicked and pass albumId ->
          */
-        requireArguments().getString("albumId")?.let { tracksViewModel.loadTracks(it) }
+        albumId.let {
+            tracksViewModel.loadTracks(it)
+        }
         /**
          * -> and observe it's reply -
          */
-        tracksViewModel.tracksListBindViewData().observe(viewLifecycleOwner, {
+        tracksViewModel.tracksListLiveData.observe(viewLifecycleOwner, {
             tracksAdapter.submitList(it)
         })
 

@@ -1,43 +1,41 @@
 package com.github.orelzion.spotifyclone.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-//import android.widget.Toast
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-//import com.github.orelzion.spotifyclone.R
 import com.github.orelzion.spotifyclone.model.TracksResponse
 import com.github.orelzion.spotifyclone.model.repository.BrowseRepository
 import com.github.orelzion.spotifyclone.view.AlbumListFragment
 
-class TracksViewModel : ViewModel() {
+class TracksViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+
+    companion object {
+        private const val TRACKS_LIST_LIVE_DATA = "tracks_list_live_data"
+        private const val SELECTED_TRACK_LIVE_DATA = "selected_track_live_data"
+        private const val RESPONSE_ERROR_DATA = "response_error_data"
+    }
 
     /**
      * Data
      */
 
-    private var tracksListViewData = emptyList<TrackViewData>()
+    /**
+     * Tracks list ViewModel's Observer, refers to Saved State Handle.
+     */
+    val tracksListLiveData =
+        savedStateHandle.getLiveData<List<TrackViewData>>(TRACKS_LIST_LIVE_DATA, emptyList())
 
-    // Tracks list ViewModel's Observer
-    private val tracksListLiveData = MutableLiveData<List<TrackViewData>>()
-
-    // sort of a getter to tracksListLiveData
-    fun tracksListBindViewData(): LiveData<List<TrackViewData>> = tracksListLiveData
-
-    // Selected Track ViewModel's Observer
-    private val selectedTrackLiveData = MutableLiveData<TrackViewData>()
-
-    fun selectedTrackBindViewData(): LiveData<TrackViewData> = selectedTrackLiveData
-
+    /**
+     * Selected Track ViewModel's Observer, refers to Saved State Handle.
+     */
+    val selectedTrackLiveData =
+        savedStateHandle.getLiveData<TrackViewData>(SELECTED_TRACK_LIVE_DATA)
 
     /**
      * Error
      */
-
-    private val responseError = MutableLiveData<Error>()
-
-    fun bindErrorData() : LiveData<Error> = responseError
-
+    private val responseErrorLiveData =
+        savedStateHandle.getLiveData<Error>(RESPONSE_ERROR_DATA)
 
 
     fun onSelectedTrack(trackData: TrackViewData) {
@@ -51,13 +49,10 @@ class TracksViewModel : ViewModel() {
             if (response != null) {
                 // Upon response arrival from Repository, it is being broadcast
                     // through Observer (represented by MutableLiveData)
-                tracksListViewData = responseToTracksData(response)
-                tracksListLiveData.postValue(tracksListViewData)
+                tracksListLiveData.postValue(responseToTracksData(response))
             } else {
-                // For no response, a proper message is broadcast to Observer
-                    // I'm pretty sure I get it wrong
-                    // TODO: I still have to find out what is the right data to send back.
-                responseError.postValue(responseError.value)
+                //TODO: is t as Error? right?
+                responseErrorLiveData.postValue(t as Error?)
 
                 Log.e(AlbumListFragment::javaClass.name, "Failed to load tracks data", t)
             }
